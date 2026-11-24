@@ -71,26 +71,42 @@ header [data-testid="stToolbar"] { visibility: hidden !important; display: none 
 .stDeployButton { display: none !important; }
 div[data-testid="stDecoration"] { display: none !important; }
 
-/* Clean viewport spacing */
-header[data-testid="stHeader"] {
+/* Ensure header is transparent and click-through except for buttons */
+header,
+header.stAppHeader,
+header[data-testid="stHeader"],
+.stAppHeader,
+[data-testid="stHeader"] {
+    background: transparent !important;
     background-color: transparent !important;
-    height: 3.5rem !important;
-    z-index: 99 !important;
+    box-shadow: none !important;
+    border: none !important;
+    pointer-events: none !important;
 }
 
-div.block-container {
-    padding-top: 4.75rem !important;
+/* Ensure sidebar collapse & expand toggle buttons remain visible and interactive */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stExpandSidebarButton"],
+button[data-testid="stSidebarCollapseButton"],
+button[data-testid="stExpandSidebarButton"] {
+    visibility: visible !important;
+    display: inline-flex !important;
+    pointer-events: auto !important;
+    z-index: 1000 !important;
+}
+
+/* Clean container spacing with top padding */
+.stMainBlockContainer,
+[data-testid="stMainBlockContainer"],
+.block-container,
+div.block-container,
+div[class*="stMainBlockContainer"],
+div[class*="block-container"] {
+    padding-top: 2rem !important;
     padding-bottom: 3rem !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
     max-width: 1400px !important;
-}
-
-/* Ensure sidebar collapse toggle remains visible and styled */
-[data-testid="stSidebarCollapseButton"] {
-    visibility: visible !important;
-    display: inline-flex !important;
-    z-index: 1000 !important;
 }
 
 /* -------------------------------------------------------------------------- */

@@ -121,6 +121,9 @@ if "demo_mode" not in st.session_state:
 # ------------------------------------------------------------------------------
 # SLIM TOP BAR
 # ------------------------------------------------------------------------------
+# Guaranteed top breathing room to ensure zero overlap with Streamlit header
+st.markdown("<div style='height: 44px; width: 100%;'></div>", unsafe_allow_html=True)
+
 site_url = os.getenv("SITE_URL", "http://localhost:3000").strip() or "http://localhost:3000"
 
 col_left, col_switch, col_settings = st.columns([6, 2, 2], vertical_alignment="center")
