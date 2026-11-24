@@ -1,0 +1,30 @@
+{
+  "weak_prompt": "Write an email to my team about the project",
+  "diagnosis": {
+    "issues": [
+      {
+        "category": "missing role",
+        "explanation": "Does not specify your role (e.g., Tech Lead, Project Manager, or Peer)."
+      },
+      {
+        "category": "missing context",
+        "explanation": "Omits the project name, recent milestone progress, and what actually took place."
+      },
+      {
+        "category": "missing format",
+        "explanation": "Lacks structure such as subject line, milestone celebration, and action item bullets."
+      },
+      {
+        "category": "missing constraints",
+        "explanation": "No length limit, tone direction, or explicit deadline rules provided."
+      },
+      {
+        "category": "ambiguity",
+        "explanation": "'The project' is vague—which project and what is the primary call to action?"
+      }
+    ],
+    "rewritten_prompt": "You are a Senior Project Manager leading the 'Apollo Cloud Migration' initiative. Write a concise, 3-paragraph status update email to the engineering team.\n\nContext:\n- We successfully completed Phase 1 (database migration) with zero downtime over the weekend.\n- Phase 2 (API gateway cutover) is scheduled for Thursday at 6:00 PM EST.\n- Team needs to submit final smoke test checklists by Wednesday 3:00 PM EST.\n\nFormatting & Constraints:\n- Tone: Encouraging, professional, and clear.\n- Structure:\n  1. Brief celebration of Phase 1 milestone.\n  2. Key details and schedule for Phase 2.\n  3. Bulleted list of required action items and strict deadlines.\n- Length: Under 250 words."
+  },
+  "original_output": "Subject: Project Update\n\nHi Team,\n\nI wanted to send a quick email to give you an update on the project. Things are progressing according to plan and we are making steady headway on our milestones.\n\nPlease ensure that you are staying on top of your assigned tasks and keep your deliverables updated. If you run into any issues or blockers, feel free to reach out to me.\n\nThanks for your hard work,\nTeam Lead",
+  "rewritten_output": "Subject: Apollo Migration: Phase 1 Complete! Phase 2 Cutover This Thursday\n\nTeam,\n\nA huge congratulations on the successful completion of Phase 1 of the Apollo Cloud Migration! Thanks to everyone's meticulous preparation, the database migration went live over the weekend with zero downtime—an outstanding achievement for our team.\n\nNext up, Phase 2 (API Gateway Cutover) is officially scheduled for this Thursday, Nov 27 at 6:00 PM EST. During the 30-minute maintenance window, the new traffic routing rules will take effect. Our on-call leads will coordinate live in the #war-room Slack channel.\n\nKey Action Items:\n* Submit Smoke Test Checklists: Complete and submit your team's checklist by Wednesday at 3:00 PM EST.\n* Code Freeze: Non-critical merges to the gateway branch are frozen starting Wednesday at 12:00 PM EST.\n* On-Call Confirmation: Module leads, please confirm coverage in the deployment document.\n\nThank you all for your focus and dedication. Let's execute Phase 2 just as smoothly!\n\nBest regards,\nSenior Project Manager"
+}
