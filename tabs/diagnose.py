@@ -2,6 +2,12 @@
 tabs/diagnose.py
 Tab 1: Diagnose (Prompt Doctor)
 Technique: Prompt Decomposition (Role, Context, Format, Constraints)
+
+Redesigned into focused numbered-step cards fitting 1080p:
+1. Input Weak Prompt (with Load demo example and Blue Run button)
+2. Diagnosis & Engineered Prompt (Prompt Strength score before/after, categorized issue chips, highlighted rewritten prompt)
+3. Comparative Outputs (Side-by-side BEFORE/AFTER columns with capped height for 1080p fit)
+4. Show prompts used expander at the bottom
 """
 
 import json
@@ -10,10 +16,12 @@ import streamlit as st
 from prompts import DIAGNOSE_SYSTEM_PROMPT, DIAGNOSE_USER_PROMPT_TEMPLATE
 from llm import ask
 from styles import (
-    render_technique_pill,
     render_problem_card,
     render_empty_state,
     render_error_card,
+    render_step_header,
+    render_prompt_strength,
+    render_issue_chips,
 )
 
 
@@ -28,26 +36,29 @@ def load_demo_data():
 
 
 def render_diagnose_tab(temperature: float, demo_mode: bool):
-    """Renders Tab 1 using the unified Prompt Clinic visual template."""
-    # 1. Technique Pill
-    render_technique_pill("Prompt Decomposition")
-
-    # 2. One-line "What goes wrong" card
-    render_problem_card(
-        "Underspecified prompts lack role, context, format, or constraints, forcing the AI to guess your intent and generate vague, generic output."
-    )
-
+    """Renders the Diagnose module page with focused numbered steps."""
     demo_data = load_demo_data()
 
     # Session state initialization
     if "diagnose_input" not in st.session_state:
         st.session_state["diagnose_input"] = ""
 
-    # 3. Input Area with "Load demo example" and Blue Run button
-    col_input_hdr, col_btn = st.columns([3, 1])
-    with col_input_hdr:
+    # 1. Technique Overview / Problem Notice Card
+    render_problem_card(
+        "Underspecified prompts lack role, context, format, or constraints, forcing the AI to guess your intent and generate vague, generic output."
+    )
+
+    # --------------------------------------------------------------------------
+    # STEP 1: INPUT WEAK PROMPT
+    # --------------------------------------------------------------------------
+    st.markdown('<div class="step-card">', unsafe_allow_html=True)
+    render_step_header(1, "Input Weak Prompt", "Paste a weak instruction to diagnose and reconstruct")
+
+    # Input action buttons
+    col_input_label, col_btn_demo = st.columns([3, 1], vertical_alignment="center")
+    with col_input_label:
         st.markdown("**Enter a weak prompt to diagnose:**")
-    with col_btn:
+    with col_btn_demo:
         if st.button("📋 Load demo example", key="btn_diagnose_demo", use_container_width=True):
             if demo_data:
                 st.session_state["diagnose_input"] = demo_data.get("weak_prompt", "")
@@ -56,36 +67,46 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
     user_prompt = st.text_area(
         label="Prompt to diagnose",
         value=st.session_state["diagnose_input"],
-        height=110,
+        height=100,
         placeholder="e.g. Write an email to my team about the project",
-        label_visibility="collapsed"
+        label_visibility="collapsed",
     )
     st.session_state["diagnose_input"] = user_prompt
 
-    run_diagnosis = st.button("🔍 Diagnose & Compare Outputs", type="primary", key="btn_diagnose_run")
+    run_diagnosis = st.button(
+        "🔍 Diagnose Prompt & Compare Outputs",
+        type="primary",
+        key="btn_diagnose_run",
+        use_container_width=True,
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
 
-    # Execution handling
+    # --------------------------------------------------------------------------
+    # EXECUTION HANDLING (using st.status for progress)
+    # --------------------------------------------------------------------------
     if run_diagnosis:
         if not user_prompt.strip():
-            st.warning("Please enter or load a prompt first.")
+            st.warning("⚠️ Please enter or load a prompt first.")
             return
 
-        with st.spinner("Analyzing prompt weaknesses and generating comparison outputs..."):
+        with st.status("🩺 Diagnosing prompt and generating comparative outputs...", expanded=True) as status:
             try:
                 diagnose_system = DIAGNOSE_SYSTEM_PROMPT
                 diagnose_user = DIAGNOSE_USER_PROMPT_TEMPLATE.format(prompt=user_prompt)
                 demo_diag_str = json.dumps(demo_data.get("diagnosis", {})) if demo_data else None
 
-                # Step 1: Diagnose
+                # Step 1: Diagnose prompt weaknesses
+                status.write("🔍 Analyzing prompt engineering weaknesses...")
                 diag_raw_response = ask(
                     system=diagnose_system,
                     user=diagnose_user,
                     temperature=temperature,
                     json_mode=True,
                     demo_mode=demo_mode,
-                    demo_data=demo_diag_str
+                    demo_data=demo_diag_str,
                 )
 
+                # Clean markdown JSON wrapping if present
                 cleaned_json = diag_raw_response.strip()
                 if cleaned_json.startswith("```json"):
                     cleaned_json = cleaned_json[7:]
@@ -97,18 +118,25 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
 
                 diagnosis_json = json.loads(cleaned_json)
                 rewritten_prompt = diagnosis_json.get("rewritten_prompt", user_prompt)
+                prompt_strength = diagnosis_json.get(
+                    "prompt_strength",
+                    {"before": 3, "after": 9}
+                )
 
-                # Step 2: Run both prompts
+                # Step 2: Comparative outputs (Original vs Rewritten)
+                status.write("⚡ Synthesizing expert rewritten prompt and scoring strength...")
                 orig_demo = demo_data.get("original_output", "") if demo_data else None
+                status.write("⚖️ Generating BEFORE output (original prompt)...")
                 orig_output = ask(
                     system="You are a helpful assistant.",
                     user=user_prompt,
                     temperature=temperature,
                     json_mode=False,
                     demo_mode=demo_mode,
-                    demo_data=orig_demo
+                    demo_data=orig_demo,
                 )
 
+                status.write("⚖️ Generating AFTER output (rewritten prompt)...")
                 rewritten_demo = demo_data.get("rewritten_output", "") if demo_data else None
                 rewritten_output = ask(
                     system="You are a helpful assistant.",
@@ -116,12 +144,19 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
                     temperature=temperature,
                     json_mode=False,
                     demo_mode=demo_mode,
-                    demo_data=rewritten_demo
+                    demo_data=rewritten_demo,
+                )
+
+                status.update(
+                    label="✅ Diagnosis and comparative outputs generated successfully!",
+                    state="complete",
+                    expanded=False,
                 )
 
                 st.session_state["diagnose_result"] = {
                     "original_prompt": user_prompt,
                     "issues": diagnosis_json.get("issues", []),
+                    "prompt_strength": prompt_strength,
                     "rewritten_prompt": rewritten_prompt,
                     "original_output": orig_output,
                     "rewritten_output": rewritten_output,
@@ -131,38 +166,58 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
                 }
 
             except json.JSONDecodeError:
+                status.update(label="❌ Failed to parse response", state="error", expanded=False)
                 render_error_card(
                     "Parsing Error",
                     "The model's diagnostic response could not be parsed as valid JSON.",
-                    "Try running again or toggle 'Offline Demo Mode' in the sidebar for guaranteed reliability."
+                    "Toggle 'Offline Demo Mode' in Settings (top bar) for guaranteed pre-cached execution."
                 )
             except Exception as ex:
+                status.update(label="❌ Execution failed", state="error", expanded=False)
                 render_error_card(
-                    "Service Notice",
+                    "Execution Notice",
                     str(ex),
-                    "Switch on 'Offline Demo Mode' in the sidebar to continue the lecture without network delays."
+                    "Switch on 'Offline Demo Mode' in Settings (top bar) to continue without network delays."
                 )
 
-    # 4. Results Section: BEFORE vs AFTER Columns
+    # --------------------------------------------------------------------------
+    # STEP 2 & 3: RESULTS (Prompt Strength, Issues, Rewritten Prompt, Side-by-Side)
+    # --------------------------------------------------------------------------
     if "diagnose_result" in st.session_state and st.session_state["diagnose_result"]:
         res = st.session_state["diagnose_result"]
-        st.markdown("<div style='margin-top: 24px;'></div>", unsafe_allow_html=True)
 
-        # Issues pill summary
+        # STEP 2 CARD: Diagnosis & Engineered Prompt
+        st.markdown('<div class="step-card">', unsafe_allow_html=True)
+        render_step_header(2, "Diagnosis & Engineered Prompt", "Weaknesses diagnosed and expert prompt synthesized")
+
+        # 1. Prompt Strength Score Meter (e.g. 3/10 -> 9/10)
+        strength = res.get("prompt_strength", {})
+        before_score = strength.get("before", 3)
+        after_score = strength.get("after", 9)
+        render_prompt_strength(before_score, after_score)
+
+        # 2. Categorized Issue Chips
         issues = res.get("issues", [])
-        if issues:
-            st.markdown(f"**Identified Weaknesses ({len(issues)} detected):**")
-            badge_html = " ".join([
-                f'<span class="badge-red" style="margin-right: 6px; margin-bottom: 6px; display: inline-block;">⚠️ {item.get("category", "")}: {item.get("explanation", "")}</span>'
-                for item in issues
-            ])
-            st.markdown(f"<div style='margin-bottom: 20px;'>{badge_html}</div>", unsafe_allow_html=True)
+        render_issue_chips(issues)
 
-        # Rewritten prompt callout
-        st.markdown("**✨ Engineered Prompt Formula:**")
-        st.code(res.get("rewritten_prompt", ""), language="markdown")
+        # 3. Rewritten Prompt Box
+        st.markdown(
+            f"""
+            <div class="rewritten-box">
+                <div class="rewritten-box-title">
+                    <span>✨ EXPERT REWRITTEN PROMPT (PRODUCTION-READY)</span>
+                </div>
+                <div class="rewritten-box-content">{res.get("rewritten_prompt", "")}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        # Two Columns: BEFORE (light red tint) vs AFTER (light green tint)
+        # STEP 3 CARD: Comparative Outputs (Side-by-Side)
+        st.markdown('<div class="step-card">', unsafe_allow_html=True)
+        render_step_header(3, "Comparative Outputs", "Direct BEFORE vs AFTER contrast on the exact same model")
+
         col_before, col_after = st.columns(2)
 
         with col_before:
@@ -172,10 +227,10 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
                     <div class="before-header">
                         <span>❌ BEFORE (Original Prompt Output)</span>
                     </div>
-                    <div class="before-content">{res.get("original_output", "")}</div>
+                    <div class="before-content comparison-scroll">{res.get("original_output", "")}</div>
                 </div>
                 """,
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
 
         with col_after:
@@ -185,29 +240,42 @@ def render_diagnose_tab(temperature: float, demo_mode: bool):
                     <div class="after-header">
                         <span>✅ AFTER (Rewritten Prompt Output)</span>
                     </div>
-                    <div class="after-content">{res.get("rewritten_output", "")}</div>
+                    <div class="after-content comparison-scroll">{res.get("rewritten_output", "")}</div>
                 </div>
                 """,
-                unsafe_allow_html=True
+                unsafe_allow_html=True,
             )
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        # 5. "Show Prompts Used" Expander at bottom
-        with st.expander("🔬 Show Prompts Used (Behind the Scenes)", expanded=False):
-            st.markdown("##### 1. Diagnosis System Instruction:")
-            st.code(res.get("diagnose_system_sent", ""), language="text")
-
-            st.markdown("##### 2. Diagnosis User Prompt:")
-            st.code(res.get("diagnose_user_sent", ""), language="text")
-
-            st.markdown("##### 3. Step 2 Comparative Prompts:")
-            st.code(
-                f"-- [CALL A: ORIGINAL] --\nUser: {res.get('original_prompt')}\n\n"
-                f"-- [CALL B: REWRITTEN] --\nUser: {res.get('rewritten_prompt_sent')}",
-                language="text"
-            )
     else:
         render_empty_state(
             icon="🩺",
             title="Ready for Prompt Diagnosis",
-            subtitle="Click 'Load demo example' above or paste any vague instruction to see how prompt engineering transforms the output."
+            subtitle="Click 'Load demo example' above or enter any prompt to see how prompt decomposition diagnoses gaps and generates an engineered rewrite.",
+        )
+
+    # --------------------------------------------------------------------------
+    # BOTTOM EXPANDER: "Show prompts used"
+    # --------------------------------------------------------------------------
+    res = st.session_state.get("diagnose_result", {})
+    with st.expander("🔬 Show Prompts Used (Behind the Scenes)", expanded=False):
+        st.markdown("##### 1. Diagnosis System Instruction:")
+        st.code(res.get("diagnose_system_sent", DIAGNOSE_SYSTEM_PROMPT), language="text")
+
+        st.markdown("##### 2. Diagnosis User Prompt:")
+        st.code(
+            res.get(
+                "diagnose_user_sent",
+                DIAGNOSE_USER_PROMPT_TEMPLATE.format(prompt="[user prompt here]"),
+            ),
+            language="text",
+        )
+
+        st.markdown("##### 3. Step 2 Comparative Prompts:")
+        orig_p = res.get("original_prompt", "[original user prompt]")
+        rewritten_p = res.get("rewritten_prompt_sent", "[rewritten prompt]")
+        st.code(
+            f"-- [CALL A: ORIGINAL] --\nUser: {orig_p}\n\n"
+            f"-- [CALL B: REWRITTEN] --\nUser: {rewritten_p}",
+            language="text",
         )

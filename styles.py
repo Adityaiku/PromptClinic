@@ -63,6 +63,31 @@ button [data-testid="stIconMaterial"],
 }
 
 /* -------------------------------------------------------------------------- */
+/* STREAMLIT CHROME HIDING (Keep Sidebar Toggle)                              */
+/* -------------------------------------------------------------------------- */
+#MainMenu { visibility: hidden !important; display: none !important; }
+footer { visibility: hidden !important; display: none !important; }
+header [data-testid="stToolbar"] { visibility: hidden !important; display: none !important; }
+.stDeployButton { display: none !important; }
+div[data-testid="stDecoration"] { display: none !important; }
+
+/* Clean viewport spacing */
+div.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 2.5rem !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    max-width: 1400px !important;
+}
+
+/* Ensure sidebar collapse toggle remains visible and styled */
+[data-testid="stSidebarCollapseButton"] {
+    visibility: visible !important;
+    display: inline-flex !important;
+    z-index: 1000 !important;
+}
+
+/* -------------------------------------------------------------------------- */
 /* PILL SELECTOR (st.segmented_control)                                       */
 /* -------------------------------------------------------------------------- */
 div[data-testid="stSegmentedControl"] {
@@ -376,6 +401,191 @@ details[data-testid="stExpander"] {
     font-weight: 700;
     text-transform: uppercase;
 }
+
+/* -------------------------------------------------------------------------- */
+/* NUMBERED STEP CARDS & 1080P VIEWPORT OPTIMIZATIONS                         */
+/* -------------------------------------------------------------------------- */
+.step-card {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    border: 1px solid #E2E8F0;
+    padding: 22px 24px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+    margin-bottom: 20px;
+}
+.step-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #F1F5F9;
+}
+.step-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.step-badge {
+    background-color: #EFF6FF;
+    color: #2563EB;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1px solid #BFDBFE;
+    letter-spacing: 0.02em;
+}
+.step-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+}
+.step-subtitle {
+    font-size: 15px;
+    color: #64748B;
+    font-weight: 500;
+}
+
+/* -------------------------------------------------------------------------- */
+/* PROMPT STRENGTH SCORE METER                                                */
+/* -------------------------------------------------------------------------- */
+.strength-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+.strength-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.strength-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #64748B;
+}
+.strength-score-pill-before {
+    background-color: #FFF1F2;
+    color: #E11D48;
+    border: 1px solid #FECDD3;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+.strength-score-pill-after {
+    background-color: #F0FDF4;
+    color: #16A34A;
+    border: 1px solid #BBF7D0;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+.strength-arrow {
+    font-size: 22px;
+    color: #94A3B8;
+    font-weight: 800;
+}
+.strength-delta {
+    font-size: 14px;
+    font-weight: 700;
+    color: #16A34A;
+    background: #DCFCE7;
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CATEGORIZED ISSUE CHIPS                                                    */
+/* -------------------------------------------------------------------------- */
+.issue-chips-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.issue-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.issue-chip-role { background-color: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+.issue-chip-context { background-color: #FAF5FF; color: #7E22CE; border: 1px solid #E9D5FF; }
+.issue-chip-format { background-color: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+.issue-chip-constraints { background-color: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5; }
+.issue-chip-ambiguity { background-color: #FFF1F2; color: #BE123C; border: 1px solid #FECDD3; }
+.issue-chip-examples { background-color: #FEFCE8; color: #A16207; border: 1px solid #FEF08A; }
+.issue-chip-default { background-color: #F1F5F9; color: #334155; border: 1px solid #CBD5E1; }
+
+/* -------------------------------------------------------------------------- */
+/* REWRITTEN PROMPT CALLOUT BOX                                               */
+/* -------------------------------------------------------------------------- */
+.rewritten-box {
+    background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);
+    border: 1.5px solid #93C5FD;
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.06);
+}
+.rewritten-box-title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2563EB;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.rewritten-box-content {
+    font-size: 17px;
+    color: #0F172A;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    font-family: 'JetBrains Mono', monospace;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+/* Scrollable comparison content for 1080p height fitting */
+.comparison-scroll {
+    max-height: 340px;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #CBD5E1 transparent;
+}
+.comparison-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.comparison-scroll::-webkit-scrollbar-thumb {
+    background-color: #CBD5E1;
+    border-radius: 4px;
+}
 </style>
 """
 
@@ -383,6 +593,94 @@ details[data-testid="stExpander"] {
 def apply_styles():
     """Injects the custom CSS styles into the Streamlit session."""
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+
+def render_step_header(step_num: int, title: str, subtitle: str = ""):
+    """Renders a standardized numbered step header."""
+    sub_html = f'<span class="step-subtitle">— {subtitle}</span>' if subtitle else ""
+    st.markdown(
+        f"""
+        <div class="step-header">
+            <div class="step-header-left">
+                <span class="step-badge">STEP {step_num}</span>
+                <span class="step-title">{title}</span>
+                {sub_html}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+def render_prompt_strength(before: int, after: int):
+    """Renders a visual comparison meter for prompt strength before and after."""
+    delta = after - before
+    delta_text = f"+{delta} pts boost" if delta > 0 else f"{delta} pts"
+    st.markdown(
+        f"""
+        <div class="strength-card">
+            <div class="strength-item">
+                <span class="strength-label">Prompt Strength:</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="strength-score-pill-before">❌ {before}/10</span>
+                    <span class="strength-arrow">➔</span>
+                    <span class="strength-score-pill-after">⚡ {after}/10</span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span class="strength-delta">{delta_text}</span>
+                <span style="font-size: 14px; color: #64748B;">Ready for production</span>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+def render_issue_chips(issues: list):
+    """Renders categorized colored chips for prompt weaknesses."""
+    if not issues:
+        return
+
+    cat_map = {
+        "missing role": ("chip-role", "🎭"),
+        "missing context": ("chip-context", "📖"),
+        "missing format": ("chip-format", "📐"),
+        "missing constraints": ("chip-constraints", "📏"),
+        "ambiguity": ("chip-ambiguity", "❓"),
+        "no examples": ("chip-examples", "💡"),
+    }
+
+    chips_html = []
+    for issue in issues:
+        cat = issue.get("category", "").lower().strip()
+        explanation = issue.get("explanation", "")
+        chip_cls, icon = "issue-chip-default", "⚠️"
+        for key, val in cat_map.items():
+            if key in cat:
+                chip_cls = f"issue-{val[0]}"
+                icon = val[1]
+                break
+
+        chips_html.append(
+            f'<div class="issue-chip {chip_cls}">'
+            f'<span>{icon} <strong>{cat.title()}:</strong> {explanation}</span>'
+            f'</div>'
+        )
+
+    st.markdown(
+        f"""
+        <div style="margin-bottom: 8px;">
+            <div style="font-size: 14px; font-weight: 700; text-transform: uppercase; color: #64748B; letter-spacing: 0.04em; margin-bottom: 8px;">
+                Identified Weaknesses ({len(issues)} detected)
+            </div>
+            <div class="issue-chips-wrapper">
+                {''.join(chips_html)}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 def render_technique_pill(technique_name: str):

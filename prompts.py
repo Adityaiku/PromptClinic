@@ -22,6 +22,10 @@ You MUST respond strictly with valid, parseable JSON conforming to this schema:
       "explanation": "A clear, concise one-sentence explanation of the weakness."
     }
   ],
+  "prompt_strength": {
+    "before": 3,
+    "after": 9
+  },
   "rewritten_prompt": "An expertly crafted rewrite applying prompt engineering best practices (clear persona, concrete background context, explicit output structure, and operational constraints)."
 }
 
@@ -34,8 +38,9 @@ Rules:
    - "missing constraints"
    - "no examples"
    - "ambiguity"
-3. The rewritten_prompt must be complete, detailed, realistic, and ready for an LLM to execute.
-4. Return pure JSON without markdown backticks or commentary outside the JSON object.
+3. The prompt_strength field MUST contain integer ratings from 1 to 10 for 'before' (original prompt score) and 'after' (rewritten prompt score).
+4. The rewritten_prompt must be complete, detailed, realistic, and ready for an LLM to execute.
+5. Return pure JSON without markdown backticks or commentary outside the JSON object.
 """
 
 DIAGNOSE_USER_PROMPT_TEMPLATE = """Please diagnose the prompt below and provide an improved, production-ready rewrite:
