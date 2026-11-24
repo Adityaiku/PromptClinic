@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Faint dot-grid pattern (1px dots, 24px spacing) used in Hero, FAQ, Footer */
+.dot-grid {
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+/* Square grid used in Integrations B */
+.square-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
+}
+
+/* Testimonials marquee fade mask on edges */
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* Custom shadow utilities matching ChronoTask soft elevation */
+.shadow-soft {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.shadow-soft-hover:hover {
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
+}
+
+.shadow-hero-card {
+  box-shadow: 0 14px 34px -4px rgba(15, 23, 42, 0.08);
+}
+
+/* Pause marquee animation on hover */
+.pause-hover:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Prefer reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
