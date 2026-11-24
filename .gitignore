@@ -1,20 +1,58 @@
-# Virtual environment
-venv/
-env/
-.venv/
-
-# Secrets and environment variables
+# Environment variables and secrets
 .env
+.env.*
+*.env
+!.env.example
+!landing/.env.example
+*.local
 
-# Python cache files
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache & artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 .pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+parts/
+var/
+wheels/
+share/python-wheels/
 
-# Streamlit local settings
+# Node.js dependencies & builds
+node_modules/
+landing/node_modules/
+landing/dist/
+.npm
+.eslintcache
+
+# Streamlit local configurations (preserve config.toml)
 .streamlit/*
 !.streamlit/config.toml
 
-# Scratch & test scripts
+# Scratch files & local developer artifacts
 scratch/
+.temp/
+tmp/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini

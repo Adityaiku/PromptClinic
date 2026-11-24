@@ -1,115 +1,212 @@
 # 🩺 Prompt Clinic
 
-An interactive, educational **Streamlit application** built for live lecture demonstrations in a college **Prompt Engineering** course.
+> **Master prompt engineering through live side-by-side contrast, claim verification, and adversarial defense.**
 
-Prompt Clinic demonstrates how systematic prompt engineering techniques transform vague, failure-prone LLM interactions into reliable, production-ready outputs.
-
----
-
-## 🌟 Key Features
-
-1. **Prompts are First-Class Citizens**:
-   Every prompt template is defined as an explicit, named constant in `prompts.py`. Nothing is hidden inside functions.
-2. **Transparent Prompt Inspection**:
-   Every tab includes a **"Show prompts used"** expander displaying the exact system instructions, user prompts, and parameters sent to the model.
-3. **Fail-Safe Offline Demo Mode**:
-   A global sidebar toggle allows live instructors to run seamless demonstrations with pre-cached high-quality outputs even if classroom Wi-Fi fails or API quotas are exhausted.
-4. **Resilient LLM Engine**:
-   `llm.py` integrates the official Google GenAI SDK (`google-genai`) with automatic exponential backoff retries and clear student-friendly error messages.
+Prompt Clinic is an interactive educational laboratory built for live classroom and projector demonstrations in prompt engineering. It bridges the gap between theoretical prompting techniques and real-world AI behavior by presenting direct, side-by-side comparative outputs for every concept. Whether diagnosing vague prompts, decomposing claims to detect hallucinations, condensing chats into reusable memory cards, mirroring author style, or shielding systems from indirect prompt injection, Prompt Clinic makes model reasoning fully transparent, auditable, and accessible.
 
 ---
 
-## 🏗️ Project Structure
+## 📸 Screenshots & Live Demo
+
+- **Live Landing Page**: [Coming Soon / Live Link Placeholder](https://promptclinic.demo.app)
+- **Live Streamlit Lab**: [Coming Soon / App Link Placeholder](https://app.promptclinic.demo.app)
 
 ```
-c:\PromptClinic\
-├── .env.example             # Template for API credentials and model configuration
-├── .env                     # Local configuration (never committed to Git)
-├── .gitignore               # Ignores virtual environment and secret keys
-├── requirements.txt         # streamlit, google-genai, python-dotenv
-├── README.md                # Project documentation and lecture guide
-├── app.py                   # Main Streamlit application (tabs and sidebar)
-├── llm.py                   # Resilient ask() function with retry and demo logic
-├── prompts.py               # Named prompt templates for all tabs
-├── demo_data/
-│   └── diagnose_demo.json   # Cached weak prompt, diagnosis JSON, and comparison outputs
-└── tabs/
-    ├── __init__.py          # Tab package exports
-    ├── diagnose.py          # Tab 1: Prompt Doctor (Full Implementation)
-    ├── verify.py            # Tab 2: Fact Checker (Phase 2 Stub)
-    ├── remember.py          # Tab 3: Context Cards (Phase 3 Stub)
-    ├── voice.py             # Tab 4: Style Mirror (Phase 4 Stub)
-    └── defend.py            # Tab 5: Prompt Shield (Phase 5 Stub)
+[ SCREENSHOT PLACEHOLDER: Landing Page Hero & Module Chooser ]
+![Prompt Clinic Landing Page](https://via.placeholder.com/1200x630.png?text=Prompt+Clinic+Landing+Page)
+
+[ SCREENSHOT PLACEHOLDER: Module 01 Diagnose Side-by-Side Comparison ]
+![Prompt Clinic Diagnose Module](https://via.placeholder.com/1200x630.png?text=Prompt+Clinic+Diagnose+Module)
 ```
 
 ---
 
-## 🚀 Quickstart Guide
+## 🔬 The 5 Core Modules
 
-### 1. Prerequisites
-- Python 3.11+
-- Google Gemini API Key ([Get one for free at Google AI Studio](https://aistudio.google.com/))
+Prompt Clinic is organized into five standalone, focused modules accessible directly or via deep links (`?module=<slug>`):
 
-### 2. Setup Virtual Environment
-The virtual environment is already initialized in `venv/`. To activate:
+### 1. 🩺 01 Diagnose: *"Check up your prompt"*
+* **Technique**: Prompt Decomposition (Role, Context, Format, Constraints)
+* **What Goes Wrong**: Underspecified prompts force LLMs to guess intent, producing generic, low-value outputs.
+* **The Fix**: Analyzes input prompts, calculates a **Prompt Strength** score (e.g. `3/10 ➔ 9/10`), highlights categorized weakness chips (missing role, context, format, constraints, ambiguity), and displays an expertly engineered prompt alongside comparative BEFORE (red) and AFTER (green) outputs.
 
-**Windows (PowerShell):**
-```powershell
+### 2. 🔍 02 Verify: *"Can you trust this answer?"*
+* **Technique**: Chain-of-Verification & Claim Decomposition
+* **What Goes Wrong**: Models generate plausible-sounding falsehoods with unwavering confidence, presenting hallucinations as verified facts.
+* **The Fix**: Splits responses into discrete factual claims, measures confidence ratings (**High**, **Medium**, **Low**), notes potential failure modes, provides a safer hedged version, and emphasizes trusted-source verification.
+
+### 3. 🧠 03 Remember: *"Save your chat's memory"*
+* **Technique**: Structured Summarization & Context Cards
+* **What Goes Wrong**: Long multi-turn conversations exceed context windows and drown critical instructions in conversational noise.
+* **The Fix**: Extracts a structured, copyable JSON Context Card (Goal, Decisions, Constraints, Preferences, Key Facts, Open Questions), showcases word-count reduction statistics, and contrasts follow-up questions with vs. without the context card.
+
+### 4. 🎭 04 Voice: *"Write like you"*
+* **Technique**: Few-Shot Style Transfer & Linguistic Induction
+* **What Goes Wrong**: LLMs default to homogeneous corporate jargon, flattening unique voice and personal rhythm.
+* **The Fix**: Induces an author's linguistic fingerprint from 3 writing samples (tone, average sentence length, vocabulary, quirks, do/don't rules), outputs a reusable prompt template, and compares generic rewrites against in-voice drafts.
+
+### 5. 🛡️ 05 Defend: *"Stop prompt hijacking"*
+* **Technique**: Delimited Defense & Structural Segregation
+* **What Goes Wrong**: Untrusted input documents contain embedded prompt injections that hijack the LLM's operational instructions.
+* **The Fix**: Contrasts naive summarization (which succumbs to injection attacks) with delimited, instruction-isolated defenses that treat document content strictly as data, highlighting security alerts with bold **PASS / FAIL** indicators.
+
+---
+
+## 🛠️ Tech Stack
+
+### **Streamlit Interactive Lab**
+- **Runtime**: Python 3.11+
+- **Framework**: Streamlit 1.35+
+- **Styling**: Custom CSS design system (Inter typography, 24px border-radius cards, projector-ready 18px+ text, `#FAFAFA` canvas)
+- **AI Engine**: Google GenAI SDK (`google-genai`), Gemini 2.5 Flash with structured JSON schema support
+
+### **Marketing Landing Page**
+- **Framework**: React 18 with Vite 6
+- **Styling**: Tailwind CSS 3
+- **Icons**: Lucide React
+- **Interaction**: Animated expanding circular reveal, floating bobbing cards, infinite marquee reviews, concentric chatbot orbit
+
+---
+
+## 🎯 Pedagogical Philosophy
+
+1. **Prompts are First-Class Citizens**: All system instructions and prompt templates are defined as named constants in `prompts.py` — never buried inside nested functions.
+2. **Total Transparency**: Every module features a `"🔬 Show Prompts Used"` expander detailing the exact system instructions and parameters sent to the model.
+3. **Fail-Safe Classroom Reliability**: Every module includes an **Offline Demo Mode** toggle that replays curated, pre-cached examples with zero network requests or API costs.
+4. **Deep-Link Ready**: Instructors can share or bookmark any module directly using `?module=<slug>` URL parameters.
+
+---
+
+## 🚀 Local Setup & Installation
+
+### Prerequisites
+- Python 3.11 or higher
+- Node.js 18 or higher (with npm)
+- A Google Gemini API Key ([Get one for free at Google AI Studio](https://aistudio.google.com/))
+
+---
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/your-username/prompt-clinic.git
+cd prompt-clinic
+```
+
+---
+
+### Step 2: Configure Environment Variables
+
+1. **Root (Streamlit App)**:
+   ```bash
+   cp .env.example .env
+   ```
+   Open `.env` and set your configuration:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-2.5-flash
+   SITE_URL=http://localhost:3000
+   ```
+   *(Note: You can run the app without an API key by enabling **Offline Demo Mode** in the app's Settings!)*
+
+2. **Landing Page**:
+   ```bash
+   cp landing/.env.example landing/.env
+   ```
+   Verify `landing/.env`:
+   ```env
+   VITE_DEMO_URL=http://localhost:8501
+   ```
+
+---
+
+### Step 3: Run the Streamlit Interactive App
+
+```bash
+# Create and activate virtual environment
+python -m venv venv
+
+# Windows (PowerShell)
 .\venv\Scripts\Activate.ps1
-```
 
-**macOS / Linux:**
-```bash
+# macOS / Linux
 source venv/bin/activate
-```
 
-### 3. Install Dependencies
-```bash
+# Install dependencies
 pip install -r requirements.txt
+
+# Run Streamlit
+streamlit run app.py
 ```
+The Streamlit app will open at: **`http://localhost:8501`**
 
-### 4. Configure API Keys
-Edit the `.env` file in the project root:
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
-```
+---
 
-*(Note: If you do not have an API key right now, simply toggle **"Offline Demo Mode"** in the app's sidebar to test the full flow.)*
+### Step 4: Run the React Landing Page
 
-### 5. Launch the Streamlit App
+In a separate terminal window:
 ```bash
-.\venv\Scripts\streamlit run app.py
+cd landing
+npm install
+npm run dev
+```
+The landing page will open at: **`http://localhost:3000`**
+
+---
+
+## 📁 Repository Structure
+
+```
+PromptClinic/
+├── .env.example               # Root environment template
+├── .gitignore                 # Git ignore rules (secrets, venv, node_modules)
+├── README.md                  # Project documentation
+├── requirements.txt           # Python dependencies
+├── app.py                     # Streamlit shared shell & router
+├── llm.py                     # Resilient Gemini API client with backoff
+├── prompts.py                 # Central repository of prompt templates
+├── styles.py                  # Custom CSS design system
+├── demo_data/                 # Pre-cached JSON datasets for Offline Demo Mode
+│   ├── diagnose_demo.json
+│   ├── verify_demo.json
+│   ├── remember_demo.json
+│   ├── voice_demo.json
+│   └── defend_demo.json
+├── tabs/                      # Individual module implementations
+│   ├── __init__.py
+│   ├── diagnose.py            # Module 01: Prompt Doctor
+│   ├── verify.py              # Module 02: Claim Verification
+│   ├── remember.py            # Module 03: Context Cards
+│   ├── voice.py               # Module 04: Style Mirror
+│   └── defend.py              # Module 05: Prompt Shield
+└── landing/                   # React + Vite Marketing Site
+    ├── package.json
+    ├── vite.config.js
+    ├── tailwind.config.js
+    ├── .env.example
+    ├── index.html
+    └── src/
+        ├── App.jsx            # Main view & circular transition
+        └── components/
+            ├── Hero.jsx
+            ├── ModuleChooser.jsx # Full-screen check-up selection overlay
+            ├── Features.jsx
+            ├── IntegrationsA.jsx
+            ├── IntegrationsB.jsx
+            ├── Testimonials.jsx
+            ├── Pricing.jsx
+            ├── FAQ.jsx
+            └── Footer.jsx
 ```
 
-The app will open automatically in your browser at `http://localhost:8501`.
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-## 🩺 Tab 1: Diagnose (Prompt Doctor)
+## 🤝 Acknowledgments
 
-### Concept Taught
-Most poor LLM responses stem from **underspecified prompts**. Prompt Doctor teaches students the 6 essential components of a robust prompt:
-- **Role**: Setting an expert persona.
-- **Context**: Grounding with background circumstances and project facts.
-- **Format**: Specifying exact output structure (bullet points, executive summary, sections).
-- **Constraints**: Setting strict length, tone, and operational boundaries.
-- **Examples**: Few-shot references.
-- **Clarity / Ambiguity reduction**: Removing vague terms.
-
-### Demonstration Flow
-1. Click **"Load demo example"** (loads `"Write an email to my team about the project"`).
-2. Click **"Diagnose & Compare Outputs"**:
-   - **Step 1**: The LLM analyzes the prompt and returns structured JSON identifying the exact missing components and produces an improved rewrite.
-   - **Step 2**: Both the original weak prompt and the rewritten prompt are executed through the LLM.
-   - **Step 3**: The side-by-side comparison displays why the engineered prompt produces far superior results.
-3. Open **"Show Prompts Used"** to reveal the system instructions and formatting templates to the class.
-
----
-
-## 🗺️ Roadmap: Upcoming Tabs
-
-- **Tab 2 — Verify (Fact Checker)**: Fact decomposition, confidence scoring, and hedging against hallucinations.
-- **Tab 3 — Remember (Context Cards)**: Summarizing long conversation history into structured JSON memory cards.
-- **Tab 4 — Voice (Style Mirror)**: Extracting a formal style guide from few-shot writing samples.
-- **Tab 5 — Defend (Prompt Shield)**: Defending against indirect prompt injections using structural delimiters and instruction hierarchies.
+- Built for hands-on, live lecture demonstrations in prompt engineering.
+- Powered by Google DeepMind's Gemini models via the `google-genai` SDK.
