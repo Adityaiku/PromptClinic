@@ -121,7 +121,7 @@ if "demo_mode" not in st.session_state:
 # ------------------------------------------------------------------------------
 # SLIM TOP BAR
 # ------------------------------------------------------------------------------
-site_url = os.getenv("SITE_URL", "http://localhost:5173").strip() or "http://localhost:5173"
+site_url = os.getenv("SITE_URL", "http://localhost:3000").strip() or "http://localhost:3000"
 
 col_left, col_switch, col_settings = st.columns([6, 2, 2], vertical_alignment="center")
 
