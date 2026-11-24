@@ -72,9 +72,15 @@ header [data-testid="stToolbar"] { visibility: hidden !important; display: none 
 div[data-testid="stDecoration"] { display: none !important; }
 
 /* Clean viewport spacing */
+header[data-testid="stHeader"] {
+    background-color: transparent !important;
+    height: 3.5rem !important;
+    z-index: 99 !important;
+}
+
 div.block-container {
-    padding-top: 1rem !important;
-    padding-bottom: 2.5rem !important;
+    padding-top: 4.75rem !important;
+    padding-bottom: 3rem !important;
     padding-left: 2rem !important;
     padding-right: 2rem !important;
     max-width: 1400px !important;
