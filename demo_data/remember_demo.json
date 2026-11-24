@@ -1,0 +1,27 @@
+{
+  "chat_transcript": "User: We're designing a high-speed portfolio site for Elena, an architectural photographer.\nAI: Great! What tech stack should we consider?\nUser: Let's use Next.js with Tailwind CSS. Crucially, hosting must cost under $50/month and pages must load under 1.5 seconds on mobile. Also, Elena insists on a dark minimalist aesthetic with hex #0a0a0a.\nAI: Noted! What about animations and gallery layout?\nUser: Strictly no heavy 3D canvas or scroll-hijacking animations. Clean grid layout only. Target delivery deadline is Friday, December 12th.\nAI: Understood. I've noted the tech stack, mobile speed constraint, dark aesthetic, and Dec 12 deadline.\nUser: We also have 84 high-res gallery images to compress using WebP. Her primary clients are luxury commercial architects.\nAI: Got it. Ready for the next steps.",
+  "context_card": {
+    "goal": "Build a responsive high-speed portfolio website for architectural photographer Elena",
+    "decisions_made": [
+      "Framework: Next.js with Tailwind CSS",
+      "Aesthetic: Dark minimalist (#0a0a0a)",
+      "Gallery: Clean static grid layout (no heavy 3D animations or scroll hijacking)"
+    ],
+    "constraints": [
+      "Hosting budget: Under $50/month",
+      "Performance: Under 1.5s mobile page load",
+      "Delivery deadline: Friday, December 12th"
+    ],
+    "preferences": [
+      "Client profile: Luxury commercial architects",
+      "Image format: WebP optimization for 84 portfolio assets"
+    ],
+    "open_questions": [
+      "Domain and DNS registration status",
+      "Client testimonial releases"
+    ]
+  },
+  "follow_up_question": "What tech stack and color palette did we choose, and what is our hard deadline?",
+  "before_output": "Based on typical best practices for photography portfolios, I recommend React or WordPress with a light neutral color palette like #FFFFFF or soft cream. As for deadlines, we haven't established a specific target date yet—when would you like to launch?",
+  "after_output": "According to our project Context Card:\n\n* **Tech Stack:** Next.js with Tailwind CSS\n* **Color Palette:** Dark minimalist aesthetic centered around `#0a0a0a`\n* **Hard Deadline:** Friday, December 12th\n\nAll choices align with the mobile speed goal (<1.5s load time) and the <$50/mo hosting budget."
+}

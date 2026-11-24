@@ -3,10 +3,11 @@ app.py
 Prompt Clinic - Streamlit Educational Application
 Designed for live classroom demonstrations in Prompt Engineering.
 
-Architecture:
-- 5 Modular Tabs demonstrating core prompt engineering techniques.
-- Resilient sidebar controls: Temperature slider & Offline Demo Mode toggle.
-- Clear error handling, visible prompts expander, and student-friendly layout.
+Restyled to match the Prompt Clinic landing page design system:
+- Font: Inter (18px+ readable text for projectors)
+- Background: #FAFAFA, white cards with 24px radius and soft shadows
+- Text: Navy #0F172A, Primary Blue #2563EB, Green (fixed/pass), Soft Red (problem/fail), Amber (uncertain)
+- Every tab uses the identical template (pill, what goes wrong card, inputs, BEFORE/AFTER columns, prompt expander)
 """
 
 import os
@@ -15,6 +16,9 @@ from dotenv import load_dotenv
 
 # Load environment variables (.env)
 load_dotenv(override=True)
+
+# Import custom styling module
+from styles import apply_styles
 
 # Import tab renderers
 from tabs import (
@@ -26,7 +30,7 @@ from tabs import (
 )
 
 # ------------------------------------------------------------------------------
-# PAGE CONFIGURATION & STYLING
+# PAGE CONFIGURATION
 # ------------------------------------------------------------------------------
 st.set_page_config(
     page_title="Prompt Clinic | Prompt Engineering Live Demo",
@@ -35,37 +39,30 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Clean, professional styling for classroom presentation
-st.markdown(
-    """
-    <style>
-    /* Metric and card accents */
-    .metric-box {
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 12px 16px;
-        margin-bottom: 12px;
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        padding: 8px 16px;
-        font-weight: 500;
-        border-radius: 4px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Inject custom CSS (Inter font, 24px cards, soft shadows, 18px+ text)
+apply_styles()
 
 # ------------------------------------------------------------------------------
 # SIDEBAR CONFIGURATION
 # ------------------------------------------------------------------------------
 with st.sidebar:
-    st.title("🩺 Prompt Clinic")
-    st.caption("Interactive Prompt Engineering Lab for College Students")
+    st.markdown(
+        """
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <div style="width: 42px; height: 42px; background: white; border-radius: 12px; 
+                        box-shadow: 0 4px 12px rgba(15,23,42,0.08); border: 1px solid #e2e8f0; 
+                        display: flex; align-items: center; justify-content: center; font-size: 22px;">
+                🩺
+            </div>
+            <div>
+                <div style="font-size: 20px; font-weight: 800; color: #0F172A; letter-spacing: -0.02em;">Prompt Clinic</div>
+                <div style="font-size: 13px; color: #64748B; font-weight: 500;">Live Demo Lab</div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    st.caption("Fix vague answers, false facts, lost context, and hijacked prompts.")
     st.divider()
 
     st.subheader("⚙️ Engine Controls")
@@ -80,8 +77,7 @@ with st.sidebar:
         help="0.0 = Deterministic & focused. 1.0 = Creative & diverse."
     )
 
-    # Demo Mode Toggle
-    # Essential for live lecture reliability when Wi-Fi is spotty or API keys are not yet configured
+    # Offline Demo Mode Toggle
     demo_mode = st.toggle(
         "Offline Demo Mode",
         value=False,
@@ -105,18 +101,37 @@ with st.sidebar:
         st.caption("Tip: Turn on **Demo Mode** above for zero-config testing!")
 
     st.divider()
-    st.caption("Prompt Clinic • Gemini API • Streamlit")
+    st.markdown(
+        """
+        <div style="font-size: 13px; color: #94A3B8; text-align: center;">
+            Prompt Clinic • Gemini API • Streamlit<br>
+            Designed for Projector Lectures
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ------------------------------------------------------------------------------
-# MAIN CONTENT: 5 INTERACTIVE TABS
+# MAIN CONTENT HEADER
 # ------------------------------------------------------------------------------
-st.header("🩺 Prompt Clinic")
 st.markdown(
-    "Explore how structured prompt engineering techniques eliminate common LLM failure modes. "
-    "Every tab exposes the actual prompt templates used behind the scenes."
+    """
+    <div style="margin-bottom: 24px;">
+        <h1 style="font-size: 38px; font-weight: 900; color: #0F172A; letter-spacing: -0.03em; margin-bottom: 6px;">
+            Prompt Clinic 🩺
+        </h1>
+        <p style="font-size: 19px; color: #64748B; margin: 0; line-height: 1.5;">
+            Master 5 core prompt engineering techniques through live side-by-side contrast. Every tab reveals the exact prompts behind the scenes.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
+# ------------------------------------------------------------------------------
+# 5 INTERACTIVE TABS (Unified Visual Template)
+# ------------------------------------------------------------------------------
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🩺 1. Diagnose",
     "🔍 2. Verify",

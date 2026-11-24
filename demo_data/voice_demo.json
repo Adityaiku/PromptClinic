@@ -1,0 +1,17 @@
+{
+  "samples": [
+    "Sample 1: Deployments shouldn't be theatrical. Run the smoke tests, check the latency graphs for 5 minutes, and log off. If something breaks, roll back within 60 seconds.",
+    "Sample 2: Good software architecture is mostly about knowing what NOT to build. Every extra abstraction is technical debt you have to pay interest on forever.",
+    "Sample 3: Cut the buzzwords. Don't say 'synergistic paradigm shift' when you mean 'we fixed the login button'. Be direct, ship early, and respect the reader's time."
+  ],
+  "draft": "I am writing this memo to kindly inform the engineering organization that we should potentially consider streamlining our deployment workflows in order to facilitate more optimal synergies across departmental operational parameters.",
+  "style_guide": {
+    "sentence_length": "Brisk (8-15 words average)",
+    "tone": "Direct, pragmatic, candid, irreverent towards bureaucracy",
+    "vocabulary": "Concrete verbs, engineering terminology, zero corporate jargon",
+    "do_list": ["Lead with the actionable takeaway", "Use short imperative sentences", "Call out real trade-offs"],
+    "dont_list": ["Never use words like 'synergy', 'paradigm', or 'optimal'", "Avoid polite padding", "Don't hide behind passive voice"]
+  },
+  "before_output": "Dear Valued Team Members,\n\nI hope this communication finds you well. The purpose of this memorandum is to gently suggest that we might explore methodologies for enhancing our organizational synergies by optimizing various continuous integration pipelines across our technical teams.\n\nWarm regards,\nManagement",
+  "after_output": "Team,\n\nOur deployment workflow is too slow and cluttered. We're cutting the red tape:\n\n1. Automate smoke tests on merge.\n2. Keep rollbacks under 60 seconds.\n3. Stop holding meetings for routine releases.\n\nShip faster, eliminate friction, and keep it simple."
+}

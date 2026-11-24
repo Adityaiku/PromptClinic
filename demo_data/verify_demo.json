@@ -1,0 +1,22 @@
+{
+  "question": "Explain Alexander Fleming's discovery of penicillin and how it was immediately used to cure soldiers in 1928.",
+  "raw_answer": "In 1928, Scottish bacteriologist Alexander Fleming discovered penicillin at St. Mary's Hospital in London when penicillium mold contaminated a staphylococcus culture. Fleming immediately purified the mold juice into an injectable antibiotic drug and successfully cured dozens of wounded soldiers during the 1928 clinical trials. In 1945, Fleming won the Nobel Prize in Medicine along with Howard Florey and Ernst Chain for this breakthrough.",
+  "claims": [
+    {
+      "claim": "Alexander Fleming discovered penicillin in 1928 at St. Mary's Hospital in London through mold contamination.",
+      "confidence": "high",
+      "risk_analysis": "Historically documented and verified fact."
+    },
+    {
+      "claim": "Fleming immediately purified the mold juice into an injectable drug and cured wounded soldiers in 1928.",
+      "confidence": "low",
+      "risk_analysis": "Historical hallucination. Fleming was unable to isolate or stabilize penicillin chemically. It was not used clinically on patients until Howard Florey and Ernst Chain successfully purified it over a decade later in 1940-1941."
+    },
+    {
+      "claim": "In 1945, Fleming, Florey, and Chain shared the Nobel Prize in Physiology or Medicine.",
+      "confidence": "high",
+      "risk_analysis": "Accurate historical record."
+    }
+  ],
+  "hedged_answer": "In 1928, Scottish bacteriologist Alexander Fleming discovered penicillin at St. Mary's Hospital in London when mold contaminated a petri dish. However, **contrary to common misconception**, Fleming did *not* immediately cure patients; he was unable to chemically stabilize or mass-purify the compound. It took over a decade until Howard Florey, Ernst Chain, and their Oxford team developed practical purification methods in the early 1940s for clinical treatment. In 1945, Fleming, Florey, and Chain were jointly awarded the Nobel Prize in Medicine."
+}
