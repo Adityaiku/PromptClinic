@@ -2,15 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Logo from './Logo';
 import { Menu, X } from 'lucide-react';
 
-export default function Navbar() {
+export default function Navbar({ onOpenChooser }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
-
-  const handleOpenDemo = () => {
-    window.open(demoUrl, '_blank');
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,9 +14,15 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleDemoClick = (e) => {
+    if (onOpenChooser) {
+      onOpenChooser(e);
+    }
+  };
+
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-100 ${
+      className={`sticky top-0 z-30 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-100 ${
         isScrolled ? 'shadow-md py-3' : 'py-4'
       }`}
     >
@@ -63,14 +63,14 @@ export default function Navbar() {
         {/* Right CTA */}
         <div className="hidden md:flex items-center gap-6">
           <button
-            onClick={handleOpenDemo}
-            className="text-[15px] font-medium text-slate-700 hover:text-slate-900 transition-colors"
+            onClick={handleDemoClick}
+            className="text-[15px] font-medium text-slate-700 hover:text-slate-900 transition-colors cursor-pointer"
           >
             Sign in
           </button>
           <button
-            onClick={handleOpenDemo}
-            className="bg-[#0B1220] hover:bg-slate-800 text-white text-[14px] font-semibold px-5 py-2.5 rounded-[14px] shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+            onClick={handleDemoClick}
+            className="bg-[#0B1220] hover:bg-slate-800 text-white text-[14px] font-semibold px-5 py-2.5 rounded-[14px] shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
             Get demo
           </button>
@@ -119,11 +119,11 @@ export default function Navbar() {
           </a>
           <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
             <button
-              onClick={() => {
+              onClick={(e) => {
                 setMobileMenuOpen(false);
-                handleOpenDemo();
+                handleDemoClick(e);
               }}
-              className="w-full bg-[#0B1220] text-white py-2.5 rounded-[14px] font-semibold text-sm"
+              className="w-full bg-[#0B1220] text-white py-2.5 rounded-[14px] font-semibold text-sm cursor-pointer"
             >
               Get demo
             </button>

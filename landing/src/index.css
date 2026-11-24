@@ -9,7 +9,7 @@
   }
 }
 
-/* Faint dot-grid pattern (1px dots, 24px spacing) used in Hero, FAQ, Footer */
+/* Faint dot-grid pattern (1px dots, 24px spacing) used in Hero, FAQ, Footer, Chooser */
 .dot-grid {
   background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1.2px, transparent 1.2px);
   background-size: 24px 24px;
@@ -45,6 +45,36 @@
 /* Pause marquee animation on hover */
 .pause-hover:hover .marquee-track {
   animation-play-state: paused;
+}
+
+/* Chooser Card Animations & Hover Dynamics */
+@keyframes riseAndFade {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-rise {
+  animation: riseAndFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.chooser-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, opacity 0.35s ease;
+}
+
+.chooser-card:hover {
+  transform: translateY(-6px) rotate(0deg) scale(1.02) !important;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
+}
+
+.chooser-card:focus-visible {
+  outline: 3px solid #2563EB;
+  outline-offset: 4px;
 }
 
 /* Prefer reduced motion accessibility */

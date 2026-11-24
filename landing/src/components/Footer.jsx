@@ -14,9 +14,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-export default function Footer() {
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
-
+export default function Footer({ onOpenChooser }) {
   // ~10 Scattered Floating Icon Tiles
   const FLOATING_TILES = [
     { icon: Stethoscope, color: 'text-blue-600', angle: '-8deg', delay: '0s', left: '6%', top: '25%' },
@@ -30,6 +28,13 @@ export default function Footer() {
     { icon: Timer, color: 'text-teal-600', angle: '-4deg', delay: '2.2s', left: '88%', top: '32%' },
     { icon: FastForward, color: 'text-blue-700', angle: '7deg', delay: '0.8s', left: '94%', top: '75%' },
   ];
+
+  const handleDemoClick = (e) => {
+    if (onOpenChooser) {
+      e.preventDefault();
+      onOpenChooser(e);
+    }
+  };
 
   return (
     <footer className="pt-24 pb-12 dot-grid bg-[#FAFAFA] border-t border-slate-100 overflow-hidden relative">
@@ -118,9 +123,12 @@ export default function Footer() {
         <div className="pt-8 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© 2026 Prompt Clinic. Built for Prompt Engineering Education.</p>
           <div className="flex items-center gap-6">
-            <a href={demoUrl} target="_blank" rel="noreferrer" className="hover:text-blue-600 transition-colors">
-              Streamlit Demo (Port 8501)
-            </a>
+            <button
+              onClick={handleDemoClick}
+              className="hover:text-blue-600 transition-colors cursor-pointer bg-transparent border-none p-0 text-xs text-slate-500"
+            >
+              Choose Module Demo
+            </button>
             <a href="#features" className="hover:text-blue-600 transition-colors">
               Privacy & Guidelines
             </a>

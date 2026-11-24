@@ -50,8 +50,15 @@ const MODULES = [
   }
 ];
 
-export default function Features() {
+export default function Features({ onOpenChooser }) {
   const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
+
+  const handleTestClick = (e, slug) => {
+    if (onOpenChooser) {
+      e.preventDefault();
+      onOpenChooser(e);
+    }
+  };
 
   return (
     <section id="features" className="py-24 md:py-32 bg-[#FAFAFA]">
@@ -104,15 +111,13 @@ export default function Features() {
 
                 {/* Bottom link */}
                 <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
-                  <a
-                    href={demoUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group"
+                  <button
+                    onClick={(e) => handleTestClick(e, item.title.toLowerCase())}
+                    className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 group bg-transparent border-none p-0 cursor-pointer"
                   >
                     Test in clinic
                     <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
-                  </a>
+                  </button>
                   <span className="text-[11px] font-mono text-slate-400">Tab 0{idx + 1}</span>
                 </div>
               </div>

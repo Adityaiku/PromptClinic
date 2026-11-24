@@ -2,11 +2,11 @@ import React from 'react';
 import SectionBadge from './common/SectionBadge';
 import { Check, Zap } from 'lucide-react';
 
-export default function Pricing() {
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
-
-  const handleOpenDemo = () => {
-    window.open(demoUrl, '_blank');
+export default function Pricing({ onOpenChooser }) {
+  const handleDemoClick = (e) => {
+    if (onOpenChooser) {
+      onOpenChooser(e);
+    }
   };
 
   return (
@@ -39,8 +39,8 @@ export default function Pricing() {
               </div>
 
               <button
-                onClick={handleOpenDemo}
-                className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-sm"
+                onClick={handleDemoClick}
+                className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-sm cursor-pointer"
               >
                 Get started
               </button>
@@ -88,8 +88,8 @@ export default function Pricing() {
               </span>
 
               <button
-                onClick={handleOpenDemo}
-                className="w-full bg-white hover:bg-slate-50 text-[#1E5BFF] font-bold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-md"
+                onClick={handleDemoClick}
+                className="w-full bg-white hover:bg-slate-50 text-[#1E5BFF] font-bold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-md cursor-pointer"
               >
                 Get started
               </button>
@@ -133,8 +133,8 @@ export default function Pricing() {
               </div>
 
               <button
-                onClick={handleOpenDemo}
-                className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-sm"
+                onClick={handleDemoClick}
+                className="w-full bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-sm py-3.5 rounded-[14px] transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 shadow-sm cursor-pointer"
               >
                 Get started
               </button>

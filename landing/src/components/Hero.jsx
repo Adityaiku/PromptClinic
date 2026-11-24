@@ -1,13 +1,13 @@
 import React from 'react';
 import Logo from './Logo';
 import ChatbotIcon from './common/ChatbotIcon';
-import { Stethoscope, Check, Clock } from 'lucide-react';
+import { Stethoscope, Check } from 'lucide-react';
 
-export default function Hero() {
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
-
-  const handleOpenDemo = () => {
-    window.open(demoUrl, '_blank');
+export default function Hero({ onOpenChooser }) {
+  const handleDemoClick = (e) => {
+    if (onOpenChooser) {
+      onOpenChooser(e);
+    }
   };
 
   return (
@@ -84,11 +84,11 @@ export default function Hero() {
             Fix vague answers, false facts, lost context and hijacked prompts with prompt engineering.
           </p>
 
-          {/* CTA Button */}
+          {/* CTA Button: Opens Module Chooser */}
           <div className="flex justify-center">
             <button
-              onClick={handleOpenDemo}
-              className="bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-base px-9 py-4 rounded-[14px] shadow-[0_10px_25px_-5px_rgba(37,99,235,0.4)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+              onClick={handleDemoClick}
+              className="bg-[#2563EB] hover:bg-blue-700 text-white font-semibold text-base px-9 py-4 rounded-[14px] shadow-[0_10px_25px_-5px_rgba(37,99,235,0.4)] transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               Try live demo
             </button>
@@ -97,7 +97,6 @@ export default function Hero() {
 
         {/* Floating Card 3: Bottom-Left "Today's checks" Card */}
         <div className="hidden lg:block absolute left-4 bottom-[-10px] rotate-[-3deg] animate-float-reverse z-20 pointer-events-none select-none">
-          {/* Folder-tab peeking behind */}
           <div className="absolute -top-2.5 left-6 w-16 h-4 bg-slate-200/80 rounded-t-lg -z-10"></div>
           
           <div className="bg-white rounded-[22px] p-4 shadow-hero-card w-72 border border-slate-100">
@@ -139,7 +138,6 @@ export default function Hero() {
 
         {/* Floating Card 4: Bottom-Right "Works with any chatbot" Card */}
         <div className="hidden lg:block absolute right-6 bottom-[-10px] rotate-[4deg] animate-float z-20 pointer-events-none select-none">
-          {/* Folder-tab peeking behind */}
           <div className="absolute -top-2.5 left-6 w-16 h-4 bg-slate-200/80 rounded-t-lg -z-10"></div>
 
           <div className="bg-white rounded-[22px] p-4 shadow-hero-card w-64 border border-slate-100">
