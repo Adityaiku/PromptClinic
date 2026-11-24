@@ -4,10 +4,12 @@ Prompt Clinic - Streamlit Educational Application
 Designed for live classroom demonstrations in Prompt Engineering.
 
 Restyled to match the Prompt Clinic landing page design system:
-- Font: Inter (18px+ readable text for projectors)
-- Background: #FAFAFA, white cards with 24px radius and soft shadows
-- Text: Navy #0F172A, Primary Blue #2563EB, Green (fixed/pass), Soft Red (problem/fail), Amber (uncertain)
-- Every tab uses the identical template (pill, what goes wrong card, inputs, BEFORE/AFTER columns, prompt expander)
+- Deep link: reads st.query_params["module"] (diagnose, verify, remember, voice, defend)
+- Pill-style selector (st.segmented_control) at top, synchronizing with query params
+- Top-right 'Back to Prompt Clinic home' link using SITE_URL from .env
+- Renders ONLY the selected module
+- Large readable text (18px+) for projectors
+- Friendly empty, loading and error states with no raw tracebacks
 """
 
 import os
@@ -39,7 +41,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Inject custom CSS (Inter font, 24px cards, soft shadows, 18px+ text)
+# Inject custom CSS (Inter font, Material icon fix, 24px cards, soft shadows)
 apply_styles()
 
 # ------------------------------------------------------------------------------
@@ -113,44 +115,106 @@ with st.sidebar:
 
 
 # ------------------------------------------------------------------------------
-# MAIN CONTENT HEADER
+# MAIN CONTENT HEADER & TOP-RIGHT HOME LINK
 # ------------------------------------------------------------------------------
-st.markdown(
-    """
-    <div style="margin-bottom: 24px;">
-        <h1 style="font-size: 38px; font-weight: 900; color: #0F172A; letter-spacing: -0.03em; margin-bottom: 6px;">
-            Prompt Clinic 🩺
-        </h1>
-        <p style="font-size: 19px; color: #64748B; margin: 0; line-height: 1.5;">
-            Master 5 core prompt engineering techniques through live side-by-side contrast. Every tab reveals the exact prompts behind the scenes.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True
+site_url = os.getenv("SITE_URL", "http://localhost:5173").strip() or "http://localhost:5173"
+
+col_title, col_link = st.columns([3, 1])
+
+with col_title:
+    st.markdown(
+        """
+        <div style="margin-bottom: 16px;">
+            <h1 style="font-size: 38px; font-weight: 900; color: #0F172A; letter-spacing: -0.03em; margin: 0 0 6px 0;">
+                Prompt Clinic 🩺
+            </h1>
+            <p style="font-size: 19px; color: #64748B; margin: 0; line-height: 1.5;">
+                Master 5 core prompt engineering techniques through live side-by-side contrast.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col_link:
+    st.markdown(
+        f"""
+        <div style="text-align: right; padding-top: 8px;">
+            <a href="{site_url}" target="_blank" style="
+                display: inline-flex; align-items: center; gap: 8px;
+                background-color: #FFFFFF; color: #2563EB;
+                border: 1px solid #E2E8F0; border-radius: 14px;
+                padding: 10px 18px; font-size: 15px; font-weight: 600;
+                text-decoration: none; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+                transition: all 0.2s ease;">
+                <span style="font-size: 16px;">←</span>
+                <span>Back to Prompt Clinic home</span>
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# ------------------------------------------------------------------------------
+# DEEP LINK & PILL-STYLE SELECTOR
+# ------------------------------------------------------------------------------
+MODULE_KEYS = ["diagnose", "verify", "remember", "voice", "defend"]
+MODULE_LABELS = {
+    "diagnose": "🩺 1. Diagnose",
+    "verify": "🔍 2. Verify",
+    "remember": "🧠 3. Remember",
+    "voice": "🎨 4. Voice",
+    "defend": "🛡️ 5. Defend",
+}
+
+# 1. Read query parameter ?module=...
+raw_param = st.query_params.get("module", "diagnose")
+url_module = raw_param.lower().strip() if raw_param else "diagnose"
+if url_module not in MODULE_KEYS:
+    url_module = "diagnose"
+
+# Keep track of active module in session state
+if "active_module" not in st.session_state:
+    st.session_state["active_module"] = url_module
+elif st.query_params.get("module") and st.query_params.get("module").lower() in MODULE_KEYS:
+    if st.query_params.get("module").lower() != st.session_state["active_module"]:
+        st.session_state["active_module"] = st.query_params.get("module").lower()
+
+def on_module_change():
+    chosen = st.session_state.get("active_module_selector")
+    if chosen and chosen in MODULE_KEYS:
+        st.session_state["active_module"] = chosen
+        st.query_params["module"] = chosen
+
+# 2. Pill selector via st.segmented_control
+selected_module = st.segmented_control(
+    label="Prompt Clinic Modules",
+    options=MODULE_KEYS,
+    format_func=lambda k: MODULE_LABELS.get(k, k),
+    default=st.session_state["active_module"],
+    selection_mode="single",
+    label_visibility="collapsed",
+    key="active_module_selector",
+    on_change=on_module_change,
 )
 
-# ------------------------------------------------------------------------------
-# 5 INTERACTIVE TABS (Unified Visual Template)
-# ------------------------------------------------------------------------------
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🩺 1. Diagnose",
-    "🔍 2. Verify",
-    "🧠 3. Remember",
-    "🎨 4. Voice",
-    "🛡️ 5. Defend"
-])
+if not selected_module:
+    selected_module = st.session_state["active_module"]
 
-with tab1:
+# Ensure query param in browser reflects active module
+if st.query_params.get("module") != selected_module:
+    st.query_params["module"] = selected_module
+
+# ------------------------------------------------------------------------------
+# RENDER ONLY THE SELECTED MODULE
+# ------------------------------------------------------------------------------
+if selected_module == "diagnose":
     render_diagnose_tab(temperature=temperature, demo_mode=demo_mode)
-
-with tab2:
+elif selected_module == "verify":
     render_verify_tab(temperature=temperature, demo_mode=demo_mode)
-
-with tab3:
+elif selected_module == "remember":
     render_remember_tab(temperature=temperature, demo_mode=demo_mode)
-
-with tab4:
+elif selected_module == "voice":
     render_voice_tab(temperature=temperature, demo_mode=demo_mode)
-
-with tab5:
+elif selected_module == "defend":
     render_defend_tab(temperature=temperature, demo_mode=demo_mode)

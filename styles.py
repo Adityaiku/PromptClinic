@@ -2,11 +2,12 @@
 styles.py
 Central styling module for Prompt Clinic Streamlit app.
 Matches the design system of the Prompt Clinic landing page:
-- Font: Inter (18px+ body text optimized for projector display)
+- Font: Inter (18px+ readable text for projectors)
 - Background: #FAFAFA
 - Cards: 24px border-radius, soft diffuse shadow (0 10px 30px rgba(15,23,42,0.06))
 - Colors: Navy #0F172A, Primary Blue #2563EB, Green #16A34A (pass/fixed),
   Soft Red #E11D48 (problem/fail), Amber #F59E0B (uncertain).
+- Fixes Material Symbols icons font collision so sidebar arrows render properly.
 """
 
 import streamlit as st
@@ -18,13 +19,40 @@ CUSTOM_CSS = """
 /* -------------------------------------------------------------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-html, body, [class*="css"], .stMarkdown, p, span, label, li {
+/* Apply Inter to normal text elements only */
+html, body, .stApp, .stMarkdown, p, label, li, .stText, h1, h2, h3, h4, h5, h6,
+span:not([data-testid="stIconMaterial"]):not(.material-symbols-rounded):not([class*="material-symbols"]) {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     color: #0F172A;
 }
 
+/* -------------------------------------------------------------------------- */
+/* PRESERVE MATERIAL ICONS (FIX SIDEBAR GLITCH)                               */
+/* Prevents 'keyboard_double_arrow_left' from showing as text                 */
+/* -------------------------------------------------------------------------- */
+[data-testid="stIconMaterial"],
+.material-symbols-rounded,
+[class*="material-symbols"],
+button [data-testid="stIconMaterial"],
+[data-testid="stSidebarCollapseButton"] span,
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Rounded' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-feature-settings: 'liga' 1 !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
 /* Projector-ready font sizing: at least 18px body text */
-.stMarkdown p, .stMarkdown li, .stMarkdown div, .stText {
+.stMarkdown p, .stMarkdown li, .stText {
     font-size: 18px !important;
     line-height: 1.6 !important;
 }
@@ -35,28 +63,46 @@ html, body, [class*="css"], .stMarkdown, p, span, label, li {
 }
 
 /* -------------------------------------------------------------------------- */
-/* TABS STYLING                                                               */
+/* PILL SELECTOR (st.segmented_control)                                       */
 /* -------------------------------------------------------------------------- */
-.stTabs [data-baseweb="tab-list"] {
-    gap: 10px !important;
+div[data-testid="stSegmentedControl"] {
     background-color: #f1f5f9 !important;
     padding: 6px !important;
     border-radius: 18px !important;
     border: 1px solid #e2e8f0 !important;
+    gap: 8px !important;
+    margin-bottom: 26px !important;
+    display: flex !important;
+    width: 100% !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
 }
 
-.stTabs [data-baseweb="tab"] {
-    padding: 10px 22px !important;
+div[data-testid="stSegmentedControl"] > div {
+    flex: 1 1 0 !important;
+}
+
+div[data-testid="stSegmentedControl"] button {
     border-radius: 12px !important;
     font-size: 17px !important;
     font-weight: 600 !important;
     color: #64748B !important;
     background-color: transparent !important;
     border: none !important;
+    padding: 10px 18px !important;
     transition: all 0.2s ease !important;
+    width: 100% !important;
+    text-align: center !important;
+    cursor: pointer !important;
 }
 
-.stTabs [aria-selected="true"] {
+div[data-testid="stSegmentedControl"] button:hover {
+    color: #0F172A !important;
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+div[data-testid="stSegmentedControl"] button[aria-selected="true"],
+div[data-testid="stSegmentedControl"] button[data-checked="true"],
+div[data-testid="stSegmentedControl"] button[aria-checked="true"] {
     background-color: #FFFFFF !important;
     color: #0F172A !important;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
@@ -65,7 +111,6 @@ html, body, [class*="css"], .stMarkdown, p, span, label, li {
 /* -------------------------------------------------------------------------- */
 /* BUTTONS: Blue Run Button & Clean White Secondary                           */
 /* -------------------------------------------------------------------------- */
-/* Primary button (Run buttons) */
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="baseButton-primary"] {
     background-color: #2563EB !important;
@@ -85,7 +130,6 @@ html, body, [class*="css"], .stMarkdown, p, span, label, li {
     box-shadow: 0 14px 28px -4px rgba(37, 99, 235, 0.5) !important;
 }
 
-/* Secondary button (Load demo example) */
 .stButton > button[kind="secondary"],
 .stButton > button[data-testid="baseButton-secondary"],
 .stButton > button:not([kind="primary"]) {
