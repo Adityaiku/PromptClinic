@@ -13,7 +13,10 @@ import { useRouter } from './router/useRouter';
 import { SettingsProvider } from './context/SettingsContext';
 import ModuleLayout from './components/app/ModuleLayout';
 import DiagnoseView from './components/app/DiagnoseView';
-import ModulePlaceholderView from './components/app/ModulePlaceholderView';
+import VerifyView from './components/app/VerifyView';
+import RememberView from './components/app/RememberView';
+import VoiceView from './components/app/VoiceView';
+import DefendView from './components/app/DefendView';
 
 export default function App() {
   const { currentPath, navigate } = useRouter();
@@ -68,14 +71,27 @@ export default function App() {
   if (currentPath.startsWith('/app/')) {
     const slug = currentPath.replace(/^\/app\/?/, '').split('/')[0] || 'diagnose';
 
+    const renderModuleView = () => {
+      switch (slug) {
+        case 'diagnose':
+          return <DiagnoseView />;
+        case 'verify':
+          return <VerifyView />;
+        case 'remember':
+          return <RememberView />;
+        case 'voice':
+          return <VoiceView />;
+        case 'defend':
+          return <DefendView />;
+        default:
+          return <DiagnoseView />;
+      }
+    };
+
     return (
       <SettingsProvider>
         <ModuleLayout currentSlug={slug} onNavigate={navigate}>
-          {slug === 'diagnose' ? (
-            <DiagnoseView />
-          ) : (
-            <ModulePlaceholderView slug={slug} />
-          )}
+          {renderModuleView()}
         </ModuleLayout>
       </SettingsProvider>
     );
