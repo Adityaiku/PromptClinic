@@ -68,9 +68,8 @@ const MODULES = [
   },
 ];
 
-export default function ModuleChooser({ onClose }) {
+export default function ModuleChooser({ onClose, onNavigate }) {
   const [selectedSlug, setSelectedSlug] = useState(null);
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
 
   // Listen for Esc key to close chooser
   useEffect(() => {
@@ -87,9 +86,12 @@ export default function ModuleChooser({ onClose }) {
     if (selectedSlug) return;
     setSelectedSlug(slug);
 
-    // After 400ms selection transition, navigate in the same tab
+    // After 400ms selection transition, navigate internally
     setTimeout(() => {
-      window.location.href = `${demoUrl}/?module=${slug}`;
+      if (onNavigate) {
+        onNavigate(`/app/${slug}`);
+      }
+      onClose();
     }, 400);
   };
 

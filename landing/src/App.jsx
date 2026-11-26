@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
@@ -9,15 +9,21 @@ import Pricing from './components/Pricing';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import ModuleChooser from './components/ModuleChooser';
+import { useRouter } from './router/useRouter';
+import { SettingsProvider } from './context/SettingsContext';
+import ModuleLayout from './components/app/ModuleLayout';
+import DiagnoseView from './components/app/DiagnoseView';
+import ModulePlaceholderView from './components/app/ModulePlaceholderView';
 
 export default function App() {
+  const { currentPath, navigate } = useRouter();
+
   const [isChooserOpen, setIsChooserOpen] = useState(false);
   const [isExpanding, setIsExpanding] = useState(false);
   const [circleExpanded, setCircleExpanded] = useState(false);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
 
   const handleOpenChooser = (e) => {
-    // Check user preference for reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (e && e.currentTarget) {
@@ -38,18 +44,15 @@ export default function App() {
       return;
     }
 
-    // Trigger expanding blue ripple animation
     setIsExpanding(true);
     setCircleExpanded(false);
 
-    // Expand the circle across the screen
     requestAnimationFrame(() => {
       setTimeout(() => {
         setCircleExpanded(true);
       }, 20);
     });
 
-    // Reveal Chooser overlay at peak expansion
     setTimeout(() => {
       setIsChooserOpen(true);
       setIsExpanding(false);
@@ -61,65 +64,89 @@ export default function App() {
     setIsChooserOpen(false);
   };
 
+  // ROUTE: /app/<slug>
+  if (currentPath.startsWith('/app/')) {
+    const slug = currentPath.replace(/^\/app\/?/, '').split('/')[0] || 'diagnose';
+
+    return (
+      <SettingsProvider>
+        <ModuleLayout currentSlug={slug} onNavigate={navigate}>
+          {slug === 'diagnose' ? (
+            <DiagnoseView />
+          ) : (
+            <ModulePlaceholderView slug={slug} />
+          )}
+        </ModuleLayout>
+      </SettingsProvider>
+    );
+  }
+
+  // ROUTE: / (Landing Page)
   return (
-    <div className="relative min-h-screen bg-[#FAFAFA] text-[#0F172A] antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
-      
-      {/* Expanding Blue Circle Overlay (800ms transition) */}
-      {isExpanding && (
+    <SettingsProvider>
+      <div className="relative min-h-screen bg-[#FAFAFA] text-[#0F172A] antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
+        {/* Expanding Blue Circle Overlay (800ms transition) */}
+        {isExpanding && (
+          <div
+            style={{
+              clipPath: circleExpanded
+                ? `circle(160% at ${origin.x}px ${origin.y}px)`
+                : `circle(0% at ${origin.x}px ${origin.y}px)`,
+              transition: 'clip-path 780ms cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+            className="fixed inset-0 z-40 bg-[#2563EB] pointer-events-none"
+          />
+        )}
+
+        {/* Main Landing Page (Scales down slightly and fades when Chooser is active) */}
         <div
-          style={{
-            clipPath: circleExpanded
-              ? `circle(160% at ${origin.x}px ${origin.y}px)`
-              : `circle(0% at ${origin.x}px ${origin.y}px)`,
-            transition: 'clip-path 780ms cubic-bezier(0.16, 1, 0.3, 1)',
-          }}
-          className="fixed inset-0 z-40 bg-[#2563EB] pointer-events-none"
-        />
-      )}
+          className={`transition-all duration-700 ease-out flex flex-col min-h-screen ${
+            isChooserOpen || isExpanding
+              ? 'scale-[0.96] opacity-40 blur-[0.5px] pointer-events-none'
+              : 'scale-100 opacity-100'
+          }`}
+        >
+          {/* 1. Sticky Navbar */}
+          <Navbar onOpenChooser={handleOpenChooser} />
 
-      {/* Main Landing Page (Scales down slightly and fades when Chooser is active) */}
-      <div
-        className={`transition-all duration-700 ease-out flex flex-col min-h-screen ${
-          isChooserOpen || isExpanding
-            ? 'scale-[0.96] opacity-40 blur-[0.5px] pointer-events-none'
-            : 'scale-100 opacity-100'
-        }`}
-      >
-        {/* 1. Sticky Navbar */}
-        <Navbar onOpenChooser={handleOpenChooser} />
+          <main className="flex-grow">
+            {/* 2. Hero with 4 Floating Tilted Cards */}
+            <Hero onOpenChooser={handleOpenChooser} />
 
-        <main className="flex-grow">
-          {/* 2. Hero with 4 Floating Tilted Cards */}
-          <Hero onOpenChooser={handleOpenChooser} />
+            {/* 3. Features: 5 Modules Grid */}
+            <Features onOpenChooser={handleOpenChooser} />
 
-          {/* 3. Features: 5 Modules Grid */}
-          <Features onOpenChooser={handleOpenChooser} />
+            {/* 4. Integrations A: Sync, 1-Click Connect, Live Activity Log */}
+            <IntegrationsA />
 
-          {/* 4. Integrations A: Sync, 1-Click Connect, Live Activity Log */}
-          <IntegrationsA />
+            {/* 5. Integrations B: Dual Concentric Orbit with Upright Counter-Rotation */}
+            <IntegrationsB />
 
-          {/* 5. Integrations B: Dual Concentric Orbit with Upright Counter-Rotation */}
-          <IntegrationsB />
+            {/* 6. Testimonials: Dual-Row Marquee */}
+            <Testimonials />
 
-          {/* 6. Testimonials: Dual-Row Marquee */}
-          <Testimonials />
+            {/* 7. Pricing: 3 Cards, Featured Pro Tier */}
+            <Pricing onOpenChooser={handleOpenChooser} />
 
-          {/* 7. Pricing: 3 Cards, Featured Pro Tier */}
-          <Pricing onOpenChooser={handleOpenChooser} />
+            {/* 8. FAQ: Accordion with Active Border and Plus/Minus Buttons */}
+            <FAQ />
+          </main>
 
-          {/* 8. FAQ: Accordion with Active Border and Plus/Minus Buttons */}
-          <FAQ />
-        </main>
+          {/* 9. Footer with Scattered Floating Tiles */}
+          <Footer onOpenChooser={handleOpenChooser} />
+        </div>
 
-        {/* 9. Footer with Scattered Floating Tiles */}
-        <Footer onOpenChooser={handleOpenChooser} />
+        {/* Full-Screen Module Chooser Overlay */}
+        {isChooserOpen && (
+          <ModuleChooser
+            onClose={handleCloseChooser}
+            onNavigate={(path) => {
+              setIsChooserOpen(false);
+              navigate(path);
+            }}
+          />
+        )}
       </div>
-
-      {/* Full-Screen Module Chooser Overlay */}
-      {isChooserOpen && (
-        <ModuleChooser onClose={handleCloseChooser} />
-      )}
-
-    </div>
+    </SettingsProvider>
   );
 }

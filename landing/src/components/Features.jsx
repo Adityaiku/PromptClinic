@@ -51,8 +51,6 @@ const MODULES = [
 ];
 
 export default function Features({ onOpenChooser }) {
-  const demoUrl = import.meta.env.VITE_DEMO_URL || 'http://localhost:8501';
-
   const handleTestClick = (e, slug) => {
     if (onOpenChooser) {
       e.preventDefault();
