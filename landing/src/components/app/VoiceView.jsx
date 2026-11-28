@@ -294,3 +294,4 @@ Analyze the provided writing samples and extract an actionable style guide detai
     </div>
   );
 }
+

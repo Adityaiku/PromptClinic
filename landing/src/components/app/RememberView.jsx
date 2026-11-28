@@ -255,3 +255,4 @@ Analyze a multi-turn chat transcript and extract a structured 'Context Card' cap
     </div>
   );
 }
+

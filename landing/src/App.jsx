@@ -9,6 +9,7 @@ import Pricing from './components/Pricing';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import ModuleChooser from './components/ModuleChooser';
+import ChooserTransitionOverlay from './components/ChooserTransitionOverlay';
 import { useRouter } from './router/useRouter';
 import { SettingsProvider } from './context/SettingsContext';
 import ModuleLayout from './components/app/ModuleLayout';
@@ -22,8 +23,7 @@ export default function App() {
   const { currentPath, navigate } = useRouter();
 
   const [isChooserOpen, setIsChooserOpen] = useState(false);
-  const [isExpanding, setIsExpanding] = useState(false);
-  const [circleExpanded, setCircleExpanded] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
 
   const handleOpenChooser = (e) => {
@@ -47,20 +47,12 @@ export default function App() {
       return;
     }
 
-    setIsExpanding(true);
-    setCircleExpanded(false);
+    setIsTransitioning(true);
+  };
 
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        setCircleExpanded(true);
-      }, 20);
-    });
-
-    setTimeout(() => {
-      setIsChooserOpen(true);
-      setIsExpanding(false);
-      setCircleExpanded(false);
-    }, 780);
+  const handleTransitionComplete = () => {
+    setIsChooserOpen(true);
+    setIsTransitioning(false);
   };
 
   const handleCloseChooser = () => {
@@ -101,23 +93,18 @@ export default function App() {
   return (
     <SettingsProvider>
       <div className="relative min-h-screen bg-[#FAFAFA] text-[#0F172A] antialiased selection:bg-blue-600 selection:text-white overflow-x-hidden">
-        {/* Expanding Blue Circle Overlay (800ms transition) */}
-        {isExpanding && (
-          <div
-            style={{
-              clipPath: circleExpanded
-                ? `circle(160% at ${origin.x}px ${origin.y}px)`
-                : `circle(0% at ${origin.x}px ${origin.y}px)`,
-              transition: 'clip-path 780ms cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            className="fixed inset-0 z-40 bg-[#2563EB] pointer-events-none"
+        {/* Cinematic Transition Overlay */}
+        {isTransitioning && (
+          <ChooserTransitionOverlay
+            origin={origin}
+            onComplete={handleTransitionComplete}
           />
         )}
 
         {/* Main Landing Page (Scales down slightly and fades when Chooser is active) */}
         <div
           className={`transition-all duration-700 ease-out flex flex-col min-h-screen ${
-            isChooserOpen || isExpanding
+            isChooserOpen || isTransitioning
               ? 'scale-[0.96] opacity-40 blur-[0.5px] pointer-events-none'
               : 'scale-100 opacity-100'
           }`}
